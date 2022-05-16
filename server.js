@@ -24,14 +24,19 @@ app.use(session({
  }));
 
 // Skapa en route där en användare kan logga in
-app.post("/api/login", (req, res) => {
-  // Kolla om bodyn innehåller ett värde “user” som är “admin”, och ett värde “pass” som är “12345”
-  if (req.body.user === "admin" && req.body.pass === "12345") {
-    // Spara en variabel “user” på req.session som innehåller värdet “admin”
-    req.session.user = "admin";
+app.post("/api/login", async (req, res) => {
+  // Kolla om användaren finns i databasen
+  const foundUser = await usersCollection.findOne({ 
+    user: req.body.user, 
+    pass: req.body.pass 
+  })
+
+  if (foundUser) {
+    // Spara en variabel “user” på req.session som innehåller username
+    req.session.user = foundUser.user;
 
     res.json({
-      user: "admin"
+      user: foundUser.user
     });
   } else {
     // Returnera en 401 och ett meddelande
