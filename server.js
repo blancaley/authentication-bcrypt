@@ -41,4 +41,13 @@ app.get("/api/loggedin", (req, res) => {
   }
 });
 
+// Route för utloggning
+app.post("/api/logout", (req, res) => {
+  req.session.destroy(() => {
+    res.json({
+      loggedin: false
+    });
+  });
+});
+
 app.listen(port, () => console.log(` Listening on port ${port}`))
