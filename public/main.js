@@ -23,3 +23,7 @@ loginForm.addEventListener("submit", async (e) => {
     loginForm.hidden = true;
   }
 })
+
+const isLoggedIn = () => {
+  
+}

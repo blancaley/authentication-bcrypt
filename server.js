@@ -30,4 +30,15 @@ app.post("/api/login", (req, res) => {
   }
 })
 
+// Route där man kan kontrollera om man är inloggad
+app.get("/api/loggedin", (req, res) => {
+  if (req.session.user) {
+    res.json({
+      user: req.session.user
+    });
+  } else {
+    res.status(401).json({ error: "Unauthorized"});
+  }
+});
+
 app.listen(port, () => console.log(` Listening on port ${port}`))
