@@ -59,4 +59,13 @@ app.post("/api/logout", (req, res) => {
   });
 });
 
-app.listen(port, () => console.log(` Listening on port ${port}`))
+// Route för att registrera ny user
+app.post("/api/register", async (req, res) => {
+  await usersCollection.insertOne(req.body);
+  res.json({
+    success: true,
+    user: req.body.user
+  });
+})
+
+app.listen(port, () => console.log(`Listening on port ${port}`))
