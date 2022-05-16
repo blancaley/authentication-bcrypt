@@ -5,7 +5,7 @@ const welcomeMsg = document.getElementById("welcomeMsg");
 
 loginForm.addEventListener("submit", async (e) => {
   e.preventDefault();
-  const res = await fetch("/api/login", {
+  await fetch("/api/login", {
     method: "POST",
     headers: {
       "Content-Type": "application/json"
@@ -16,14 +16,18 @@ loginForm.addEventListener("submit", async (e) => {
     })
   });
 
+  location.reload();
+
+})
+
+const isLoggedIn = async () => {
+  const res = await fetch("/api/loggedin");
   const data = await res.json();
 
   if (data.user) {
     welcomeMsg.innerText = `Welcome ${data.user}`;
     loginForm.hidden = true;
   }
-})
-
-const isLoggedIn = () => {
-  
 }
+
+isLoggedIn();

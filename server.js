@@ -37,7 +37,7 @@ app.get("/api/loggedin", (req, res) => {
       user: req.session.user
     });
   } else {
-    res.status(401).json({ error: "Unauthorized"});
+    res.status(401).json({ error: "Unauthorized" });
   }
 });
 
