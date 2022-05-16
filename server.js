@@ -1,10 +1,19 @@
 import express from "express";
 import session from "express-session";
+import { MongoClient } from "mongodb";
+
 const app = express();
 const port = 3000;
 
+const client = new MongoClient("mongodb://127.0.0.1:27017");
+await client.connect();
+const db = client.db("loginproject");
+const usersCollection = db.collection("users");
+
 app.use(express.static("public"));
+
 app.use(express.json());
+
 app.use(session({
   resave: false, // don't save session if unmodified
   saveUninitialized: false, // don't create session until something stored
