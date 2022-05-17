@@ -1,9 +1,12 @@
 import express from "express";
 import session from "express-session";
 import { MongoClient } from "mongodb";
+import bcrypt from "bcrypt";
 
 const app = express();
 const port = 3000;
+const saltRounds = 5;
+
 
 const client = new MongoClient("mongodb://127.0.0.1:27017");
 await client.connect();
@@ -23,6 +26,9 @@ app.use(session({
   }
  }));
 
+ 
+ // const passMatches = await bcrypt.compare(req.body.pass, user.pass);
+ 
 // Middleware som kollar om användaren är inloggad.
  const restrict = (req, res, next) => {
    if (req.session.user) {
@@ -75,7 +81,14 @@ app.post("/api/logout", (req, res) => {
 
 // Route för att registrera ny user
 app.post("/api/register", async (req, res) => {
-  await usersCollection.insertOne(req.body);
+  // Encrypt password
+  const hash = await bcrypt.hash(req.body.pass, saltRounds);
+
+  await usersCollection.insertOne({ 
+    user: req.body.user,
+    pass: hash
+  });
+
   res.json({
     success: true,
     user: req.body.user
