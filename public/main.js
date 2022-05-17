@@ -52,8 +52,6 @@ signupForm.addEventListener("submit", async (e) => {
   welcomeMsg.innerHTML = `Tack för att du registrerat dig, ${data.user}!`;
 })
 
-
-
 const isLoggedIn = async () => {
   const res = await fetch("/api/loggedin");
   const data = await res.json();
@@ -61,6 +59,7 @@ const isLoggedIn = async () => {
   if (data.user) {
     welcomeMsg.innerText = `Welcome ${data.user}`;
     loginForm.hidden = true;
+    signupForm.hidden = true;
   } else {
     logoutForm.hidden = true;
   }

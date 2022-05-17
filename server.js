@@ -23,6 +23,15 @@ app.use(session({
   }
  }));
 
+// Middleware som kollar om användaren är inloggad.
+ const restrict = (req, res, next) => {
+   if (req.session.user) {
+     next();
+   } else {
+     res.status(401).send({ error: "Unauthorized" });
+   }
+ }
+
 // Skapa en route där en användare kan logga in
 app.post("/api/login", async (req, res) => {
   // Kolla om användaren finns i databasen
@@ -72,5 +81,12 @@ app.post("/api/register", async (req, res) => {
     user: req.body.user
   });
 })
+
+//“Skyddade” route med egen custom middleware
+app.get("/api/secretdata", restrict, (req, res) => {
+  res.json({
+    secret: "Javascript is fun!"
+  });
+});
 
 app.listen(port, () => console.log(`Listening on port ${port}`))
