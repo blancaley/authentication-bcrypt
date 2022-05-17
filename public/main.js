@@ -8,6 +8,9 @@ const signupForm = document.getElementById("signup");
 const signUpUser = document.getElementById("signUpUser");
 const signUpPass = document.getElementById("signUpPass");
 
+const secretBtn = document.getElementById("secretBtn");
+const secretOutput = document.getElementById("secretOutput");
+
 loginForm.addEventListener("submit", async (e) => {
   e.preventDefault();
   await fetch("/api/login", {
@@ -37,7 +40,7 @@ logoutForm.addEventListener("submit", async (e) => {
 signupForm.addEventListener("submit", async (e) => {
   e.preventDefault();
 
-  const res = await fetch("api/register", {
+  const res = await fetch("/api/register", {
     method: "POST",
     headers: {
       "Content-Type": "application/json"
@@ -50,6 +53,17 @@ signupForm.addEventListener("submit", async (e) => {
   const data = await res.json();
 
   welcomeMsg.innerHTML = `Tack för att du registrerat dig, ${data.user}!`;
+})
+
+secretBtn.addEventListener("click", async () => {
+  const res = await fetch("/api/secretdata")
+
+  if(res.status === 401) {
+    secretOutput.innerText = "That is a secret!";
+  } else {
+    const data = await res.json();
+    secretOutput.innerText = data.secret;
+  }
 })
 
 const isLoggedIn = async () => {
