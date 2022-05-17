@@ -25,9 +25,6 @@ app.use(session({
     maxAge: 5 * 60 * 1000 // 5 minutes
   }
  }));
-
- 
- // const passMatches = await bcrypt.compare(req.body.pass, user.pass);
  
 // Middleware som kollar om användaren är inloggad.
  const restrict = (req, res, next) => {
@@ -42,11 +39,12 @@ app.use(session({
 app.post("/api/login", async (req, res) => {
   // Kolla om användaren finns i databasen
   const foundUser = await usersCollection.findOne({ 
-    user: req.body.user, 
-    pass: req.body.pass 
+    user: req.body.user
   })
+  // Check a password
+  const passMatches = await bcrypt.compare(req.body.pass, foundUser.pass);
 
-  if (foundUser) {
+  if (passMatches) {
     // Spara en variabel “user” på req.session som innehåller username
     req.session.user = foundUser.user;
 
